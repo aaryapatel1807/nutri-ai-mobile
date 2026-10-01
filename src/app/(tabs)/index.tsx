@@ -1,5 +1,6 @@
 import { Pressable, ScrollView, View } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/ui/AppText';
@@ -113,13 +114,15 @@ export default function HomeScreen() {
       {/* Daily meals */}
       <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
         <AppText variant="headline">Daily meals</AppText>
-        <AppText variant="bodyStrong" color={colors.primaryDark}>
-          See all
-        </AppText>
+        <Pressable onPress={() => router.push('/statistics')}>
+          <AppText variant="bodyStrong" color={colors.primaryDark}>
+            See all
+          </AppText>
+        </Pressable>
       </View>
 
       {day.meals.map((meal) => (
-        <MealRow key={meal.id} meal={meal} onAdd={() => {}} />
+        <MealRow key={meal.id} meal={meal} onAdd={() => router.push('/food-detail')} />
       ))}
     </ScrollView>
   );
