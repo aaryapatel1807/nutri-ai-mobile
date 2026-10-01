@@ -111,3 +111,24 @@ The Expo token is transient-use only; never stored in files or memory.)
 3. **Expo credential rotation** — the `nutriai-mobile-vm` token (and the generated
    account password, both seen in tool history) should be revoked/rotated after
    the deploy is verified, per the transient-secret rule.
+
+## Final status — 22:31 UTC 2 Oct 2026 — BUILD FINISHED ✅
+
+- **Status:** finished
+- **APK download:** https://expo.dev/artifacts/eas/DWu70FuGBN4mI25Hj0wy3jOlWWkU5aTt8AnuVQn9iKM.apk
+  (verified: HTTP 200, application/octet-stream, 141,820,815 bytes ≈ 135 MB)
+- Build page: https://expo.dev/accounts/aaryapatel1807/projects/nutriai/builds/69ae519c-93fc-4a78-bde7-078f8e5d483d
+- Timeline: queued 20:54 → in progress 22:12 → finished 22:31 UTC.
+- The APK was built from commit 73f58fd (full overnight app: auth, Home, Food
+  Detail, Scanner, Statistics, Coach, Workout, light/dark Glass Office theme).
+
+## Still outstanding (morning)
+
+1. **Install test** — the APK has not been installed on a real device yet
+   (impossible from this VM). Aarya should install it on his phone and sign in
+   with his existing NutriAI web account.
+2. **Git push** — local commits `a027117`, `73f58fd`, `abd54d6` (+ this report
+   update) still unpushed; needs Aarya's fresh transient PAT in the morning.
+3. **Expo credential rotation** — revoke the `nutriai-mobile-vm` token (and the
+   generated account password) after the deploy is verified, per the
+   transient-secret rule.
