@@ -38,7 +38,7 @@ export default function HomeScreen() {
             justifyContent: 'center',
           }}
         >
-          <AppText variant="title" color={colors.primaryDark}>
+          <AppText variant="title" color={colors.primaryStrong}>
             {day.userName.charAt(0)}
           </AppText>
         </View>
@@ -93,11 +93,11 @@ export default function HomeScreen() {
       >
         <View style={{ flex: 1, gap: 6 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <MaterialCommunityIcons name="fire" size={18} color={colors.primaryDark} />
+            <MaterialCommunityIcons name="fire" size={18} color={colors.primaryStrong} />
             <AppText variant="bodyStrong">Calories Today</AppText>
           </View>
           <AppText variant="body">{day.kcalConsumed.toLocaleString('en-IN')} kcal consumed</AppText>
-          <AppText variant="bodyStrong" color={colors.primaryDark}>
+          <AppText variant="bodyStrong" color={colors.primaryStrong}>
             {remaining.toLocaleString('en-IN')} kcal remaining to goal
           </AppText>
         </View>
@@ -115,7 +115,7 @@ export default function HomeScreen() {
       <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' }}>
         <AppText variant="headline">Daily meals</AppText>
         <Pressable onPress={() => router.push('/statistics')}>
-          <AppText variant="bodyStrong" color={colors.primaryDark}>
+          <AppText variant="bodyStrong" color={colors.primaryStrong}>
             See all
           </AppText>
         </Pressable>

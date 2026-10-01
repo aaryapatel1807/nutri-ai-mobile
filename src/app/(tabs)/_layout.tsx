@@ -4,7 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/ui/AppText';
-import { colors, radii, spacing } from '@/theme/tokens';
+import { useTheme } from '@/theme/ThemeContext';
+import { radii, spacing } from '@/theme/tokens';
 
 const TABS = [
   { name: 'index', label: 'Home', icon: 'home' as const, activeIcon: 'home' as const },
@@ -15,6 +16,7 @@ const TABS = [
 
 function NutriTabBar({ state, navigation }: any) {
   const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
 
   return (
     <View
@@ -28,6 +30,8 @@ function NutriTabBar({ state, navigation }: any) {
         borderRadius: radii.pill,
         paddingVertical: 10,
         paddingHorizontal: 6,
+        borderWidth: 1,
+        borderColor: colors.inputBorder,
         shadowColor: '#1B1E23',
         shadowOpacity: 0.1,
         shadowRadius: 20,

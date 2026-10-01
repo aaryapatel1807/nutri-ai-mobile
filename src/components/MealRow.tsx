@@ -42,7 +42,7 @@ export function MealRow({ meal, onAdd }: MealRowProps) {
         <MaterialCommunityIcons
           name={logged ? 'food-apple' : 'silverware-fork-knife'}
           size={28}
-          color={logged ? colors.primaryDark : colors.faint}
+          color={logged ? colors.primaryStrong : colors.faint}
         />
       </View>
 

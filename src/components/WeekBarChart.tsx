@@ -26,7 +26,7 @@ export function WeekBarChart({ data, height = 150 }: WeekBarChartProps) {
         const peak = d.pct === max;
         return (
           <View key={d.day} style={{ flex: 1, alignItems: 'center', gap: 6 }}>
-            <AppText variant="caption" color={peak ? colors.primaryDark : colors.muted}>
+            <AppText variant="caption" color={peak ? colors.primaryStrong : colors.muted}>
               {d.pct}%
             </AppText>
             <View

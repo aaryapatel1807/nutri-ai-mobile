@@ -77,7 +77,7 @@ export default function FoodDetailScreen() {
           <AppText variant="headline">Grilled Chicken Bowl</AppText>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <View style={{ backgroundColor: colors.primarySoft, borderRadius: radii.pill, paddingHorizontal: 10, paddingVertical: 4 }}>
-              <AppText variant="label" color={colors.primaryDark}>BOWL</AppText>
+              <AppText variant="label" color={colors.primaryStrong}>BOWL</AppText>
             </View>
             <AppText variant="caption">540 G</AppText>
           </View>

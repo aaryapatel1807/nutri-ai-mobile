@@ -18,7 +18,7 @@ const WEEK: DayBar[] = [
 ];
 
 const STATS = [
-  { label: 'Exercise', value: '2.0 hours', icon: 'run' as const, tint: '#E4F2DA', color: colors.primaryDark, extra: 'bars' as const },
+  { label: 'Exercise', value: '2.0 hours', icon: 'run' as const, tint: '#E4F2DA', color: colors.primaryStrong, extra: 'bars' as const },
   { label: 'BPM', value: '86 bpm', icon: 'heart' as const, tint: '#FBE3E3', color: colors.danger, extra: 'pulse' as const },
   { label: 'Weight', value: '68.4 kg', icon: 'scale-bathroom' as const, tint: '#FDEBDD', color: '#E8823C', extra: 'trend' as const },
   { label: 'Water', value: '6 / 8 glasses', icon: 'water' as const, tint: '#DFEAFB', color: '#3B82F6', extra: 'drops' as const },
