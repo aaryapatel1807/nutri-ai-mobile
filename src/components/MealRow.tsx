@@ -2,20 +2,47 @@ import { Pressable, View } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { AppText } from '@/components/ui/AppText';
-import type { MealEntry } from '@/store/useAppStore';
-import { colors, radii, shadows, spacing } from '@/theme/tokens';
+import { useTheme } from '@/theme/ThemeContext';
+import { radii, shadows, spacing } from '@/theme/tokens';
+import type { MealGroup, MealType } from '@/store/useAppStore';
 
 interface MealRowProps {
-  meal: MealEntry;
-  onAdd: (meal: MealEntry) => void;
+  group: MealGroup;
+  onAdd: (type: MealType) => void;
+}
+
+const MEAL_META: Record<
+  MealType,
+  { icon: keyof typeof MaterialCommunityIcons.glyphMap; accent: 'protein' | 'carbs' | 'fat' | 'primary' }
+> = {
+  Breakfast: { icon: 'bread-slice', accent: 'carbs' },
+  Lunch: { icon: 'food-apple', accent: 'protein' },
+  Dinner: { icon: 'silverware-fork-knife', accent: 'fat' },
+  Snack: { icon: 'cookie', accent: 'primary' },
+};
+
+function formatTime(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const h = d.getHours();
+  const ampm = h >= 12 ? 'pm' : 'am';
+  const hh = h % 12 || 12;
+  return `${hh}:${String(d.getMinutes()).padStart(2, '0')} ${ampm}`;
 }
 
 /**
- * Meal timeline row from the Home reference: thumbnail tile, name/kcal/time,
- * and the green circular + button.
+ * Daily-meal timeline row: thumbnail tile, name/kcal/items/time,
+ * and the circular + button. Empty groups show "Not logged yet".
+ * All colours resolve from the active theme.
  */
-export function MealRow({ meal, onAdd }: MealRowProps) {
-  const logged = meal.items > 0;
+export function MealRow({ group, onAdd }: MealRowProps) {
+  const { colors } = useTheme();
+  const meta = MEAL_META[group.type];
+  const accent =
+    meta.accent === 'primary' ? colors.primary : colors[meta.accent];
+  const logged = group.items.length > 0;
+  const tint = `${accent}1A`;
+  const latest = group.items[group.items.length - 1];
 
   return (
     <View
@@ -34,36 +61,40 @@ export function MealRow({ meal, onAdd }: MealRowProps) {
           width: 64,
           height: 64,
           borderRadius: radii.md,
-          backgroundColor: meal.tint,
+          backgroundColor: logged ? tint : colors.input,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
         <MaterialCommunityIcons
-          name={logged ? 'food-apple' : 'silverware-fork-knife'}
+          name={meta.icon}
           size={28}
-          color={logged ? colors.primaryStrong : colors.faint}
+          color={logged ? accent : colors.faint}
         />
       </View>
 
       <View style={{ flex: 1, gap: 2 }}>
-        <AppText variant="title">{meal.name}</AppText>
+        <AppText variant="title">{group.type}</AppText>
         {logged ? (
           <>
-            <AppText variant="bodyStrong">{meal.kcal} kcal</AppText>
+            <AppText variant="bodyStrong">
+              {Math.round(group.totalKcal).toLocaleString('en-GB')} kcal
+            </AppText>
             <AppText variant="caption">
-              {meal.time} · {meal.items} items
+              {formatTime(latest.date)}
+              {formatTime(latest.date) ? ' · ' : ''}
+              {group.items.length} {group.items.length === 1 ? 'item' : 'items'}
             </AppText>
           </>
         ) : (
-          <AppText variant="caption">{meal.time}</AppText>
+          <AppText variant="caption">Not logged yet</AppText>
         )}
       </View>
 
       <Pressable
-        onPress={() => onAdd(meal)}
+        onPress={() => onAdd(group.type)}
         accessibilityRole="button"
-        accessibilityLabel={`Log ${meal.name}`}
+        accessibilityLabel={logged ? `Log more ${group.type}` : `Log ${group.type}`}
         style={({ pressed }) => ({
           width: 52,
           height: 52,
