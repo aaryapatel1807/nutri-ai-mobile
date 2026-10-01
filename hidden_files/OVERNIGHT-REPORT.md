@@ -66,3 +66,48 @@ which this agent cannot operate. Exact handoff steps are at the bottom.
 ## Test account
 
 Aarya signs into the mobile app with his **existing NutriAI web account** (same backend) — no new account needed for the app itself.
+
+## Deploy update — 02:24 UTC 2 Oct 2026 — BUILD SUBMITTED
+
+**EAS build submitted and in queue:**
+- Build ID: `69ae519c-93fc-4a78-bde7-078f8e5d483d`
+- Logs: https://expo.dev/accounts/aaryapatel1807/projects/nutriai/builds/69ae519c-93fc-4a78-bde7-078f8e5d483d
+- Profile: preview (APK), Android, SDK 57, version 1.0.0 (1)
+- Commit built: 73f58fd (includes the EAS project link)
+- A background monitor is polling `build:view` every 3 min; the APK URL will be collected on completion.
+
+**Root cause of the earlier submission failures (worth knowing):**
+The VM's egress proxy blackholes ~25-30% of HTTPS requests made via Node's
+`node-fetch` + `https-proxy-agent` stack (request sent, no response bytes, and
+sometimes the socket vanishes so cleanly that Node's event loop drains and
+eas-cli exits 0 mid-flight — that was the "silent death"). curl and Node's
+built-in undici fetch are 100% reliable through the same proxy (30/30, 8/8).
+
+**Fix (transient, VM-local only — nothing committed to the repo):**
+`/tmp/undici-fetch-shim.js`, loaded via `NODE_OPTIONS=--require`, replaces
+`node-fetch` in eas-cli's require cache with a wrapper around undici's global
+fetch (drops the node-fetch-only `agent` option, converts node streams via
+`Readable.toWeb()`, maps `timeout` to `AbortSignal.timeout()`). Needs
+`NODE_USE_ENV_PROXY=1` (already in the VM env) so undici uses the proxy.
+6/6 `build:list` calls clean after the fix; the full submission (keystore
+generation + 3MB tarball upload + fingerprint + createBuild mutation) went
+through on the first try with the shim.
+
+Reproduce/verify any time with:
+```
+cd ~/workspace/nutriai-mobile
+NODE_OPTIONS="--require /tmp/undici-fetch-shim.js" EXPO_TOKEN='<expo-token>' \
+  npx eas-cli@latest build:list --platform android
+```
+(Note: `/tmp` is ephemeral — the shim must be recreated after a VM restart.
+The Expo token is transient-use only; never stored in files or memory.)
+
+## Still outstanding (morning)
+
+1. **APK URL** — collected automatically when the build finishes; goes in the morning report.
+2. **Git push** — local commits `a027117` + `73f58fd` still unpushed; the saved
+   GitHub credential lost its github.com line overnight. Needs Aarya's fresh
+   transient PAT in the morning (push via `http.extraHeader` Basic auth from env).
+3. **Expo credential rotation** — the `nutriai-mobile-vm` token (and the generated
+   account password, both seen in tool history) should be revoked/rotated after
+   the deploy is verified, per the transient-secret rule.
