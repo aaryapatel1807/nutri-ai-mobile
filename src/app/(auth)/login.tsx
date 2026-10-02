@@ -14,8 +14,8 @@ import { spacing } from '@/theme/tokens';
 export default function LoginScreen() {
   const { colors } = useTheme();
   const login = useAuthStore((s) => s.login);
-  const params = useLocalSearchParams<{ notice?: string }>();
-  const [email, setEmail] = useState('');
+  const params = useLocalSearchParams<{ notice?: string; email?: string }>();
+  const [email, setEmail] = useState(params.email ?? '');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -77,7 +77,7 @@ export default function LoginScreen() {
       />
       {params.notice === 'exists' ? (
         <AppText variant="body" color={colors.primaryStrong}>
-          That email already has an account — sign in instead.
+          That email already has an account — and the password didn&apos;t match. Try signing in again.
         </AppText>
       ) : null}
       {error ? (

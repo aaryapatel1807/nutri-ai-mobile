@@ -36,8 +36,12 @@ export default function RegisterScreen() {
       if (signedIn) {
         router.replace('/(tabs)');
       } else {
-        // Existing email: backend creates nothing and returns no token.
-        router.replace({ pathname: '/(auth)/login', params: { notice: 'exists' } });
+        // Email exists but the password didn't match: send them to login
+        // with the email prefilled so they can just fix the password.
+        router.replace({
+          pathname: '/(auth)/login',
+          params: { notice: 'exists', email: email.trim().toLowerCase() },
+        });
       }
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Could not create your account. Try again.');
