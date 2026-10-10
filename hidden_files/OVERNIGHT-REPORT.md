@@ -132,3 +132,14 @@ The Expo token is transient-use only; never stored in files or memory.)
 3. **Expo credential rotation** — revoke the `nutriai-mobile-vm` token (and the
    generated account password) after the deploy is verified, per the
    transient-secret rule.
+
+## Rebuild — 2 Oct 2026 ~10:35 IST — INCLUDES AUTH FIX ✅
+- Rebuilt because the 69ae519c APK predated the 30555af register/login fix.
+- Build ID: `1aca57d9-2fe9-4c45-8018-9e2c4ed8460f` (preview profile, APK, Android)
+- Build page: https://expo.dev/accounts/aaryapatel1807/projects/nutriai/builds/1aca57d9-2fe9-4c45-8018-9e2c4ed8460f
+- APK: https://expo.dev/artifacts/eas/Y6XHPHzw9utHhKp66FlyujH-z8Y_Cc8WbeWc9Fe4_pY.apk (verified HTTP 200)
+- Built from commit 30555af (auth UX fix) + backend auth fix live on Vercel.
+- Note: first submit attempt failed at tarball upload ("duplex option is required
+  when sending a body") — fixed /tmp/undici-fetch-shim.js to set `duplex: 'half'`
+  for stream bodies. Shim now handles both GraphQL + uploads.
+- Expo token saved to ~/.expo/state.json (owner-only) per Aarya's "save this dont lose".
